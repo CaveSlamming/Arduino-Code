@@ -1,33 +1,47 @@
+/*
+  MKR IMU Shield - Simple Euler Angles
+
+  This example reads the Euler angle values from the IMU
+  on the MKR IMU Shield and continuously prints them to the 
+  Serial Monitor.
+
+  The circuit:
+  - Arduino MKR board
+  - Arduino MKR IMU Shield attached
+
+  This example code is in the public domain.
+*/
+
 #include <MKRIMU.h>
 
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(9600);
-  while(!Serial);
+  while (!Serial);
 
-  if(!IMU.begin()) {
-    Serial.println("Failed to initialize IMU.");
+  if (!IMU.begin()) {
+    Serial.println("Failed to initialize IMU!");
 
-    while(1);
+    while (1);
   }
-  delay(100);
-  Serial.print("Sampling rate: ");
-  Serial.println(IMU.gyroscopeSampleRate());
-  Serial.println("Degrees/sec: \nx\ty\tz");
+
+  Serial.print("Euler Angles sample rate = ");
+  Serial.print(IMU.eulerAnglesSampleRate());
+  Serial.println(" Hz");
+  Serial.println();
+  Serial.println("Euler Angles in degrees");
+  Serial.println("Heading\tRoll\tPitch");
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  float x, y, z;
+  float heading, roll, pitch;
 
-  if (IMU.gyroscopeAvailable()) {
-    IMU.readGyroscope(x, y, z);
+  if (IMU.eulerAnglesAvailable()) {
+    IMU.readEulerAngles(heading, roll, pitch);
 
-    Serial.print(x);
+    Serial.print(heading);
     Serial.print('\t');
-    Serial.print(y);
+    Serial.print(roll);
     Serial.print('\t');
-    Serial.println(z);
+    Serial.println(pitch);
   }
-  delay(100);
 }
